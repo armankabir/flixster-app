@@ -53,15 +53,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.titleLabel.text = title
         cell.synopsisLabel.text = synopsis
         //Poster image configuration
-        let baseURL = "http://image.tmdb.org/t/p/w154"
+        let baseURL = "https://image.tmdb.org/t/p/w154"
         let posterPath = movie["poster_path"] as! String
         let imgURL = URL(string: baseURL+posterPath)
-        print("Full url is: \(imgURL)")
+       // print("Full url is: \(imgURL!)")
         cell.posterView.af.setImage(withURL: imgURL!)
         return cell
     }
 
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        //Find the movie
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        // Pass the selected object to the new view controller.
+        
+        let detailsViewController = segue.destination as! MovieDetailsViewController //screen being transitioned to 
+        detailsViewController.movie = movie //passing the movie into the new destination view controller
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
 }
 
- 
